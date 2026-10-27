@@ -1,0 +1,28 @@
+apiden okunması -  postmendan apiden test bilgisi giriceğiz . 
+
+sorguyu sadece view çekerken kullanacaz
+Hasta no - hasta adı soyadı - hasta vardiya saati - : DATABASE'DEN ÇEKECEĞİZ .
+süre - durum (geldi /gelmedi - diyaziz durumları) -... : 
+Database'den gelen bilgilerin üstüne bu bilgileri view ile ekleyeceğiz . 
+Wiew i direkt programa çekecez . direkt Api İLE çekebiliriz ya da javascript ile çekecez . 
+REST APİ  ile sekreter ekranından displaye veri göndereceğiz. 
+tek endpoint olacak : Bu endpoinler de sekreter ekranından displaye veri göndereceğiz sorguda kullanılacak 
+
+
+POSTMAN'den test apisi vereceğiz . mock apiye istekleri göndermeye çalışacam . 
+
+
+DİREKT VİEW 'DEN DATABASE ENGINE KULLANARAK ÇEKEBİLİRSİN 
+
+YA DA SERVİS KULLANARAK DATABASE 
+JAVASCRİPT İÇİN DATABSE ENGİNE BULUNACAK 
+
+LOCAL GİT REPOSU OLUŞTURALIM - VERSİYON KONTROLÜ VS. İÇİN 
+api isteği gönderebilmesi için test alanı oluşturulacak . 
+
+DATABASE ENGINE projeye entegre etmek lazım .
+
+View'ları ayrı bir user login ile mi veriyorlar? HAYZAM BEYE SORULACAK 
+
+
+
