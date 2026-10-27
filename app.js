@@ -409,6 +409,181 @@ function saveApiEndpointConfig() {
   executeDailyOracleQuery();
 }
 
+// ============================================================================
+// REST APİ İLE SEKRETER EKRANINDAN DISPLAYE VERİ GÖNDERME MOTORU
+// emirhan.txt Madde 8 & 9: Tek endpoint üzerinden sekreter ekranından displaye veri gönderme
+// ============================================================================
+async function syncPatientChangeToApi(payload) {
+  // Varsayılan API URL'si veya yapılandırılmış endpoint
+  const targetUrl = ORACLE_API_ENDPOINT || 'http://localhost:3000/api/seanslar';
+  try {
+    const res = await fetch(targetUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      console.log('📡 [REST API] Sekreter verisi başarıyla API endpointine gönderildi:', data);
+      return data;
+    }
+  } catch (err) {
+    // Local modda offline veya harici sunucu kapalıysa sessizce logla, yerel engine zaten aktif çalışır
+    console.warn('⚠️ [REST API] Backend endpointine bağlanılamadı, yerel engine güncellendi:', err.message);
+  }
+  return null;
+}
+
+// ============================================================================
+// REST APİ TEST ALANI & POSTMAN İSTEK SİMÜLATÖRÜ
+// emirhan.txt Madde 1, 12, 21: Test alanı, mock API ve Postman istek testi
+// ============================================================================
+function openApiTesterModal() {
+  const modal = document.getElementById('api-tester-modal');
+  if (modal) {
+    modal.classList.add('active');
+    const urlInp = document.getElementById('tester-url');
+    if (urlInp && !urlInp.value) {
+      urlInp.value = ORACLE_API_ENDPOINT || 'http://localhost:3000/api/seanslar';
+    }
+  }
+}
+
+function closeApiTesterModal() {
+  const modal = document.getElementById('api-tester-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function onTesterMethodChange() {
+  const method = document.getElementById('tester-http-method').value;
+  const bodyGroup = document.getElementById('tester-body-group');
+  if (bodyGroup) {
+    bodyGroup.style.display = (method === 'GET') ? 'none' : 'block';
+  }
+}
+
+function loadTesterTemplate(templateType) {
+  const methodSelect = document.getElementById('tester-http-method');
+  const bodyArea = document.getElementById('tester-request-body');
+  
+  if (templateType === 'GET_ALL') {
+    methodSelect.value = 'GET';
+    onTesterMethodChange();
+    return;
+  }
+
+  methodSelect.value = 'POST';
+  onTesterMethodChange();
+
+  switch (templateType) {
+    case 'STATUS_UPDATE':
+      bodyArea.value = JSON.stringify({
+        HASTASEANSREFNO: 10001,
+        STATU: "BAGLANDI",
+        PRESENCE: "GELDI",
+        SURE: 145
+      }, null, 2);
+      break;
+    case 'ROOM_CALL':
+      bodyArea.value = JSON.stringify({
+        HASTASEANSREFNO: 10003,
+        STATU: "ODAYA_CAGRILDI",
+        PRESENCE: "GELDI"
+      }, null, 2);
+      break;
+    case 'PRESENCE_ABSENT':
+      bodyArea.value = JSON.stringify({
+        HASTASEANSREFNO: 10002,
+        PRESENCE: "GELMEDI"
+      }, null, 2);
+      break;
+    case 'NEW_PATIENT':
+      bodyArea.value = JSON.stringify({
+        HASTAADI: "Canan Yılmaz",
+        HASTANO: "10000000012",
+        HASTASEANSREFNO: 10012,
+        VARDIYA: "SABAH",
+        SEANSTURU: "ACIL_HEMODIYALIZ",
+        BASVURUTURU: "ACIL_SERVIS",
+        STATU: "KATETER_TAKILIYOR",
+        PRESENCE: "GELDI",
+        YATAKNO: 9,
+        HEMODIYALIZ_GECMISI: 0
+      }, null, 2);
+      break;
+  }
+}
+
+async function executeApiTestRequest() {
+  const method = document.getElementById('tester-http-method').value;
+  const url = document.getElementById('tester-url').value.trim() || 'http://localhost:3000/api/seanslar';
+  const bodyText = document.getElementById('tester-request-body').value;
+  const statusEl = document.getElementById('tester-response-status');
+  const outputEl = document.getElementById('tester-response-output');
+  const runBtn = document.getElementById('btn-run-api-test');
+
+  if (runBtn) runBtn.textContent = 'Gönderiliyor...';
+  if (statusEl) {
+    statusEl.textContent = 'İstek yapılıyor...';
+    statusEl.style.color = '#38bdf8';
+  }
+
+  try {
+    const options = {
+      method: method,
+      headers: {
+        'Accept': 'application/json'
+      }
+    };
+
+    if (method !== 'GET') {
+      options.headers['Content-Type'] = 'application/json';
+      options.body = bodyText;
+    }
+
+    const startTime = performance.now();
+    const res = await fetch(url, options);
+    const duration = Math.round(performance.now() - startTime);
+
+    const json = await res.json();
+    if (statusEl) {
+      statusEl.textContent = `HTTP ${res.status} ${res.statusText} (${duration} ms)`;
+      statusEl.style.color = res.ok ? '#2dd4bf' : '#f87171';
+    }
+    if (outputEl) {
+      outputEl.textContent = JSON.stringify(json, null, 2);
+    }
+
+    // Gönderilen işlem sonrasında yerel ekranı da derhal senkronize et
+    if (method === 'GET' && Array.isArray(json)) {
+      activeSeansList = json.map(mapOracleRowToActiveSeans);
+      renderSecretaryPanel();
+      renderTvSlides();
+      showToast(`🔄 REST API GET: ${activeSeansList.length} seans çekildi.`);
+    } else if (res.ok) {
+      // POST ile güncellendiyse verileri yeniden sorgula veya yerelde güncelle
+      executeDailyOracleQuery();
+      showToast('🚀 REST API isteği başarılı! TV Display ve Sekreter ekranı senkronize edildi.');
+    }
+
+  } catch (err) {
+    console.error('API Test Hatası:', err);
+    if (statusEl) {
+      statusEl.textContent = 'Bağlantı Hatası (Sunucu kapalı veya CORS)';
+      statusEl.style.color = '#f87171';
+    }
+    if (outputEl) {
+      outputEl.textContent = `Hata Mesajı: ${err.message}\n\nİpucu: Eğer Node.js mock sunucusu henüz başlatılmadıysa terminalden 'node server.js' komutunu çalıştırabilirsiniz.`;
+    }
+    showToast('⚠️ REST API isteği başarısız oldu.');
+  } finally {
+    if (runBtn) runBtn.textContent = 'Gönder';
+  }
+}
+
 
 // ============================================================================
 // SADECE UFAK ZİL SESİ (ZARİF MEDİKAL DING SESİ)
@@ -1025,6 +1200,13 @@ function setPatientPresence(seansId, presenceStatus) {
   renderTvSlides();
   // Slayt süresi değiştiği için güncelle
   updateTimerPill();
+
+  // REST API ile sekreter ekranından TV display'e veri gönderimi (emirhan.txt Madde 8 & 9)
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    PRESENCE: presenceStatus,
+    STATU: patient.status
+  });
 }
 
 // Dropdown seçimi değiştiğinde kaydet butonunu vurgula
@@ -1112,6 +1294,13 @@ function setPatientStatus(seansId, statusCode) {
   renderSecretaryPanel();
   renderTvSlides();
   showToast(`${patient.maskedName} durumu güncellendi.`);
+
+  // REST API ile sekreter ekranından TV Display'e veri gönder (emirhan.txt Madde 8 & 9)
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: statusCode,
+    PRESENCE: patient.presence || 'GELDI'
+  });
 }
 
 // 2. Odaya Çağrı (Hazırlık Odasına Geçiş Süreci - Süre bitince otomatik sonraki aşamaya geçer)
@@ -1141,6 +1330,12 @@ function triggerCallPatientToRoom(seansId) {
   renderTvSlides();
   updateTickerMessage(`Bilgilendirme: ${patient.maskedName} hazırlık için davet edildi.`);
   showToast(`🔔 ${patient.maskedName} odaya çağrıldı (Ön hazırlık süresi başladı).`);
+
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: 'ODAYA_CAGRILDI',
+    PRESENCE: patient.presence || 'GELDI'
+  });
 }
 
 // 3. Kateter Takılıyor (30 Dakika)
@@ -1164,6 +1359,13 @@ function triggerCatheterCountdown(seansId) {
   renderSecretaryPanel();
   renderTvSlides();
   showToast(`⏳ ${patient.maskedName} için 30 dakikalık kateter hazırlığı başladı.`);
+
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: 'KATETER_TAKILIYOR',
+    PRESENCE: patient.presence || 'GELDI',
+    SURE: 30
+  });
 }
 
 // 4. Makineye Bağlandı (2 Saat 25 Dakika = 145 Dakika)
@@ -1185,6 +1387,13 @@ function triggerDialysisCountdown(seansId) {
   renderSecretaryPanel();
   renderTvSlides();
   showToast(`🔌 ${patient.maskedName} diyalize bağlandı. 2 saat 25 dk geri sayım başladı.`);
+
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: 'BAGLANDI',
+    PRESENCE: patient.presence || 'GELDI',
+    SURE: 145
+  });
 }
 
 // 5. Danışma Çağrısı (SADECE UFAK BİR ZİL ÇALAR, ASLA KONUŞMA YOKTUR)
@@ -1209,6 +1418,12 @@ function triggerCallFamily(seansId) {
   renderTvSlides();
   updateTickerMessage(`Danışma: ${patient.maskedName} hasta yakını danışmaya davet edildi.`);
   showToast(`ℹ️ ${patient.maskedName} hasta yakını danışmaya davet edildi.`);
+
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: 'YAKINI_CAGRILIYOR',
+    PRESENCE: patient.presence || 'GELDI'
+  });
 }
 
 // 6. Seans Tamamlama / Yarıda Kesme
@@ -1299,6 +1514,13 @@ function saveAbortReason() {
 
   updateTickerMessage(`Bilgilendirme: ${patient.maskedName} seansı tamamlandı (${displayText}).`);
   showToast(`📋 ${displayText} TV ekranına yansıtıldı.`);
+
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: patient.seansId,
+    STATU: 'YARIDA_KALDI',
+    PRESENCE: patient.presence || 'GELDI',
+    kabuliptalaciklama: displayText
+  });
 }
 
 // ============================================================================
@@ -1406,6 +1628,18 @@ function handleUrgentPatientSubmit(e) {
   renderSecretaryPanel();
   renderTvSlides();
   showToast(`⚡ ${nucleusPatient.source} hastası Nucleus verileriyle ${bedNo} nolu yatağa kabul edildi.`);
+
+  // REST API ile yeni seansı sunucuya / displaye aktar (emirhan.txt Madde 8 & 9)
+  syncPatientChangeToApi({
+    HASTASEANSREFNO: newSeans.seansId,
+    HASTAADI: `${newSeans.firstName} ${newSeans.lastName}`,
+    HASTANO: newSeans.tcNo,
+    YATAKNO: bedNo,
+    STATU: newSeans.status,
+    PRESENCE: 'GELDI',
+    BASVURUTURU: newSeans.gelisTipi,
+    HEMODIYALIZ_GECMISI: newSeans.dialysisHistory
+  });
 }
 
 // YARDIMCI BİLEŞENLER

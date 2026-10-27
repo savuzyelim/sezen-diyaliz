@@ -25,4 +25,5 @@ DATABASE ENGINE projeye entegre etmek lazım .
 View'ları ayrı bir user login ile mi veriyorlar? HAYZAM BEYE SORULACAK 
 
 
+PL SQL İLE ÇALIŞAN DATABASE ENGİNE KÜTÜPHANESİ VAR MI ?  VARSA ONUNLA ÇALIŞMAYA ÇALIŞALIM . 
 

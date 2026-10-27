@@ -125,6 +125,12 @@
           </svg>
           <span>Süreyi İlerlet (+1dk)</span>
         </button>
+        <button class="btn-api-tester" onclick="openApiTesterModal()" title="REST API & Postman Simülatör Test Alanı">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <span>REST API Test Konsolu</span>
+        </button>
         <button class="btn-urgent-add" onclick="openUrgentPatientModal()" title="Acil Servis veya Yoğun Bakımdan Hasta Kabulü">
           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -308,6 +314,85 @@
       <div class="modal-buttons">
         <button type="button" class="btn-action-small" onclick="closeApiConfigModal()">Kapat</button>
         <button type="button" class="btn-urgent-add" onclick="saveApiEndpointConfig()">Ayarları Kaydet ve Test Et</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODAL 3B: REST APİ TEST ALANI & POSTMAN İSTEK SİMÜLATÖRÜ
+       emirhan.txt: "api isteği gönderebilmesi için test alanı oluşturulacak"
+       emirhan.txt: "POSTMAN'den test apisi vereceğiz . mock apiye istekleri göndermeye çalışacam"
+       ========================================================================= -->
+  <div class="modal-overlay" id="api-tester-modal">
+    <div class="modal-content" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
+        <h3 style="color: #0284c7; display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+          </svg>
+          REST API Test Alanı & Postman İstek Simülatörü
+        </h3>
+        <button type="button" onclick="closeApiTesterModal()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+        Sekreter ekranından TV Display'e tek endpoint (<code>/api/seanslar</code>) üzerinden veri gönderme veya Postman isteklerini simüle etme alanı.
+      </p>
+
+      <!-- İstek Satırı (HTTP Method + URL + Gönder Butonu) -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <select id="tester-http-method" class="form-control" style="width: 110px; font-weight: 700; color: #0284c7;" onchange="onTesterMethodChange()">
+          <option value="GET">GET</option>
+          <option value="POST" selected>POST</option>
+          <option value="PATCH">PATCH</option>
+        </select>
+        <input type="text" id="tester-url" class="form-control" value="http://localhost:3000/api/seanslar" placeholder="http://localhost:3000/api/seanslar" style="flex: 1; font-family: monospace; font-size: 12px;">
+        <button type="button" class="btn-urgent-add" onclick="executeApiTestRequest()" id="btn-run-api-test" style="padding: 8px 18px;">
+          Gönder
+        </button>
+      </div>
+
+      <!-- Hızlı Şablon Butonları -->
+      <div style="margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Hızlı Postman Test Şablonları:</span>
+        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('STATUS_UPDATE')" style="font-size: 11px;">1. Durum Değiştir (Yatağa Bağla)</button>
+        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('ROOM_CALL')" style="font-size: 11px;">2. Odaya Çağır (Hazırlık)</button>
+        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('PRESENCE_ABSENT')" style="font-size: 11px;">3. Gelmedi İşaretle</button>
+        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('NEW_PATIENT')" style="font-size: 11px;">4. Yeni Acil Hasta Ekle</button>
+        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('GET_ALL')" style="font-size: 11px;">5. Tüm Seansları Çek (GET)</button>
+      </div>
+
+      <!-- JSON Gövdesi (Body) -->
+      <div class="form-group" id="tester-body-group">
+        <label for="tester-request-body" style="display: flex; justify-content: space-between;">
+          <span>JSON İstek Gövdesi (Request Payload):</span>
+          <span style="font-size: 11px; color: #0d9488; font-weight: normal;">Content-Type: application/json</span>
+        </label>
+        <textarea id="tester-request-body" class="form-control" style="font-family: monospace; font-size: 11.5px; height: 110px; background: #0f172a; color: #38bdf8; border-color: #334155; resize: vertical;">{
+  "HASTASEANSREFNO": 10001,
+  "STATU": "BAGLANDI",
+  "PRESENCE": "GELDI"
+}</textarea>
+      </div>
+
+      <!-- Yanıt Alanı (Response) -->
+      <div class="form-group">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <label style="margin: 0; font-weight: 700; font-size: 12px;">Sunucu Yanıtı (API Response):</label>
+          <span id="tester-response-status" style="font-size: 11px; font-weight: 700; color: #64748b;">Henüz istek gönderilmedi</span>
+        </div>
+        <pre id="tester-response-output" style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 11.5px; color: #94a3b8; max-height: 160px; overflow-y: auto; white-space: pre-wrap; margin: 0;">// Gönder butonuna basıldığında HTTP yanıtı burada gösterilecektir.</pre>
+      </div>
+
+      <!-- Postman / cURL İpucu Kutusu -->
+      <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 10px 12px; margin-top: 12px; font-size: 11.5px; color: var(--text-muted);">
+        💡 <strong>Postman & cURL Testi İçin:</strong><br>
+        <code>curl -X POST http://localhost:3000/api/seanslar -H "Content-Type: application/json" -d '{"HASTASEANSREFNO": 10001, "STATU": "BAGLANDI"}'</code>
+      </div>
+
+      <div class="modal-buttons" style="margin-top: 16px;">
+        <button type="button" class="btn-action-small" onclick="closeApiTesterModal()">Kapat</button>
+        <button type="button" class="btn-urgent-add" onclick="executeApiTestRequest()">İsteği Çalıştır ve Ekrana Yansıt</button>
       </div>
     </div>
   </div>
