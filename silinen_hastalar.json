@@ -1,0 +1,62 @@
+[
+  {
+    "SILINME_ID": 1,
+    "SILINME_TARIHI": "2026-11-05T07:57:02.026Z",
+    "SILINME_NEDENI": "Test Silme Islemi",
+    "HASTASEANSREFNO": 1793865421976,
+    "HASTANO": "999988",
+    "HASTAADI": "TEST SILINECEK HASTA",
+    "ADI": "TEST SILINECEK",
+    "SOYADI": "HASTA",
+    "TCKIMLIKNO": "999988",
+    "HEMODIYALIZ_GECMISI": 50,
+    "VARDIYA": "SABAH",
+    "YATAKNO": 12,
+    "GUN_GRUBU": "BUGUN",
+    "OZEL_GUNLER": null,
+    "SURE": 145,
+    "STATU": "BEKLEMEDE",
+    "BASVURUTURU": "ACIL_SERVIS",
+    "MERKEZ": "Erişkin",
+    "KAYIT_TARIHI": null,
+    "ACIL_TARIH": null,
+    "DETAY_JSON": {
+      "seans": {
+        "HASTASEANSREFNO": 1793865421976,
+        "hastatedavirefno": 50018,
+        "KABULTARIHI": "2026-11-05T07:57:01.976Z",
+        "HASTABASVURUREFNO": 30018,
+        "HASTAHIZMETREFNO": 40018,
+        "seanstarihi": "2026-11-05T07:57:01.976Z",
+        "VARDIYATANIMNO": 1,
+        "VARDIYA": "SABAH",
+        "SEANSTURU": "HEMODIYALIZ",
+        "SURE": 145,
+        "BASVURUTURU": "ACIL_SERVIS",
+        "MERKEZ": "Erişkin",
+        "GUN_GRUBU": "BUGUN",
+        "OZEL_GUNLER": null,
+        "KAYIT_TARIHI": null,
+        "ACIL_TARIH": null,
+        "MANUEL_BUGUN_TARIH": null,
+        "MANUEL_HARIC_TARIH": null,
+        "kabuliptalaciklama": "",
+        "STATU": "BEKLEMEDE",
+        "YATAKNO": 12,
+        "HASTAADI": "TEST SILINECEK HASTA",
+        "HASTANO": "999988"
+      },
+      "hastaBilgisi": {
+        "hastano": "999988",
+        "adi": "TEST SILINECEK",
+        "soyadi": "HASTA",
+        "tckimlikno": "999988"
+      },
+      "dyzHasta": {
+        "hastadiyalizrefno": 70018,
+        "hastano": "999988",
+        "hemodiyaliz_gecmisi": 50
+      }
+    }
+  }
+]

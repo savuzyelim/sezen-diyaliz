@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nucleus HBYS Entegreli Hemodiyaliz Display & Süreç Yönetim Sistemi</title>
+  <title>Hemodiyaliz Ünitesi - Entegre Yönetim & Display Sistemi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
-<body>
+<body data-screen-mode="secretary">
 
   <!-- =========================================================================
        ÜST GLOBAL BİLGİ ŞERİDİ
@@ -22,32 +22,31 @@
         </svg>
       </div>
       <div class="brand-text">
-        <h1>HEMODİYALİZ ÜNİTESİ DISPLAY & ÇAĞRI SİSTEMİ</h1>
+        <h1>KOCAELİ ÜNİVERSİTESİ HEMODİYALİZ ÜNİTESİ</h1>
       </div>
     </div>
 
-    <!-- Nucleus HBYS Entegrasyon Göstergesi -->
-    <div id="hbys-status-badge" style="display: flex; align-items: center; gap: 8px; background: #f0fdfa; border: 1px solid #99f6e4; padding: 5px 14px; border-radius: 999px; cursor: pointer;" onclick="openApiConfigModal()" title="Oracle REST API Endpoint Ayarlarını Aç">
-      <span style="width: 8px; height: 8px; background: #0d9488; border-radius: 50%;" id="hbys-status-dot"></span>
-      <span style="font-size: 11.5px; font-weight: 700; color: #0f766e;" id="hbys-status-text">Nucleus HBYS Canlı Entegrasyon: Aktif (Bugünün Seansları)</span>
+    <!-- Ekran Seçici ve TV Kontrolleri -->
+    <div class="screen-switcher-group">
+      <button type="button" class="btn-screen-switch active" id="btn-switch-secretary" onclick="switchScreenMode('secretary')" title="Yönetim Konsolunu Aç">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+        </svg>
+        <span>Yönetim Ekranı</span>
+      </button>
+      <button type="button" class="btn-screen-switch" id="btn-switch-display" onclick="switchScreenMode('display')" title="TV Bekleme Ekranını Aç">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        </svg>
+        <span>TV Bekleme Ekranı</span>
+      </button>
+      <a href="display.html" target="_blank" class="btn-open-external" title="TV Bekleme Ekranını Ayrı Sekmede Aç">
+        <span>Bekleme Ekranı (Yeni Sekme)</span>
+      </a>
     </div>
 
     <div class="header-right">
-      <!-- Sekreter Giriş / Çıkış Butonu & Profil Bilgisi -->
-      <div id="secretary-auth-container" style="display: flex; align-items: center; gap: 8px;">
-        <div id="secretary-logged-badge" style="display: none; align-items: center; gap: 8px; background: #e0f2fe; border: 1px solid #7dd3fc; padding: 5px 12px; border-radius: var(--radius-sm);">
-          <span style="font-size: 12px; font-weight: 700; color: #0369a1;" id="secretary-logged-name">👤 Sekreter: Aktif</span>
-          <button type="button" class="btn-action-small" style="padding: 3px 8px; font-size: 11px; background: #fee2e2; color: #b91c1c; border-color: #fca5a5;" onclick="logoutSecretary()">Çıkış</button>
-        </div>
-        <button type="button" class="audio-toggle-btn" id="btn-login-open" onclick="openLoginModal()" style="background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; font-weight: 700;">
-          <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-          </svg>
-          <span>Sekreter Girişi</span>
-        </button>
-      </div>
-
-      <!-- Bildirim Zili Aç / Kapa (Konuşma/Anons Yoktur) -->
+      <!-- Bildirim Zili Aç / Kapa -->
       <button class="audio-toggle-btn active" id="sound-toggle-btn" onclick="toggleSound()" title="Kısa Bildirim Zilini Aç/Kapat">
         <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
@@ -69,337 +68,354 @@
   </header>
 
   <!-- =========================================================================
-       BÖLÜNMÜŞ ÇALIŞMA ALANI: %50 SEKRETER | %50 TV BEKLEME EKRANI
+       ANA ÇALIŞMA DÜZENİ: SOL MENÜ (SIDEBAR) + SAĞ İÇERİK ALANI
        ========================================================================= -->
-  <main class="split-workspace">
-    <div class="split-divider"></div>
-
+  <div class="app-layout">
+    
     <!-- -----------------------------------------------------------------------
-         SOL YARI (%50): SEKRETER YÖNETİM KONSOLU
+         SOL KENAR ÇUBUĞU (SIDEBAR): HER HESABIN HASTA VE HESAP YÖNETİMİ MENÜSÜ
          ----------------------------------------------------------------------- -->
-    <section class="panel-secretary" id="panel-secretary" aria-label="Sekreter Kontrol Paneli">
-      <div class="panel-header">
-        <div class="panel-title">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          </svg>
-          Sekreter Durum Yönetimi (Nucleus HBYS)
+    <aside class="app-sidebar" id="app-sidebar">
+      
+      <!-- Üst: Aktif Kullanıcı Profil Kartı -->
+      <div>
+        <div class="sidebar-user-card" id="sidebar-user-card">
+          <div class="sidebar-user-avatar" id="sidebar-user-avatar">👤</div>
+          <div class="sidebar-user-info">
+            <span class="sidebar-user-name" id="sidebar-user-name">Giriş Yapılmadı</span>
+            <span class="sidebar-user-role-badge secretary" id="sidebar-user-role-badge">Misafir</span>
+          </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <span id="secretary-presence-count" style="font-size: 11px; font-weight: 700; color: #0d9488;">
-            Geldi: 0 | Gelmedi: 0
-          </span>
-          <span id="secretary-total-count" style="font-size: 11px; font-weight: 700; color: #38bdf8;">
-            0 / 9 Yatak Dolu
-          </span>
-        </div>
-      </div>
 
-      <!-- Kilitli Durum Uyarısı (Giriş Yapılmadığında Gözükür) -->
-      <div id="secretary-lock-overlay" class="secretary-lock-overlay" style="display: none;">
-        <div class="lock-card">
-          <div class="lock-icon">
-            <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        <!-- Sol Navigasyon Sekmeleri -->
+        <nav class="sidebar-nav">
+          <div class="sidebar-nav-title">Yönetim Modülleri</div>
+          
+          <button type="button" class="sidebar-nav-item active" id="btn-nav-patients" onclick="switchMainView('patients')" title="Diyaliz Seans ve Hasta Yönetimi">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
             </svg>
-          </div>
-          <h3>Sekreter Girişi Gereklidir</h3>
-          <p>Hasta durumlarını yönetmek, kateter/diyaliz süreçlerini başlatmak veya hastanın gelme/gelmeme durumunu bildirmek için lütfen giriş yapınız.</p>
-          <button type="button" class="btn-urgent-add" onclick="openLoginModal()" style="margin-top: 14px;">Giriş Yap</button>
-        </div>
+            <span>Hasta Yönetimi</span>
+          </button>
+
+          <!-- Gün Değiştirme Menüsü (Normal Sayfa Listesi Olarak Açar) -->
+          <button type="button" class="sidebar-nav-item" id="btn-nav-schedule" onclick="switchMainView('schedule')" title="Hasta Günlerini Değiştir, Başka Günden Hasta Aktar & Liste Yönetimi">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span>📅 Gün Değiştirme Menüsü</span>
+          </button>
+
+          <button type="button" class="sidebar-nav-item" id="btn-nav-account" onclick="switchMainView('account')" title="Kullanıcı Profili, Şifre Değiştirme ve Sekreter Yönetimi">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <span>Hesap Yönetimi</span>
+          </button>
+        </nav>
       </div>
 
-      <!-- Arama, Oracle DB Canlı Senkronizasyon ve Acil Servis Kabul Butonu -->
-      <div class="secretary-toolbar">
-        <input type="text" id="secretary-search" class="secretary-search" placeholder="Hasta adı, TC veya Protokol No ile ara...">
-        <button class="btn-db-sync" id="btn-oracle-sync" onclick="syncWithOracleDatabase()" title="Oracle DB'den (TRUNC(SYSDATE)) Bugünkü Seansları Yeniden Çek">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="icon-sync">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+      <!-- Alt Kısım: Giriş / Çıkış Butonu -->
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-btn-logout" id="btn-sidebar-auth" onclick="toggleSidebarAuthAction()">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
           </svg>
-          <span id="txt-oracle-sync">Oracle DB Çek</span>
-        </button>
-        <button class="btn-fast-forward" onclick="fastForwardTimers(60)" title="Geri sayımı 1 dakika ileri sararak otomatik sonraki aşamaya geçişi test et">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
-          </svg>
-          <span>Süreyi İlerlet (+1dk)</span>
-        </button>
-        <button class="btn-api-tester" onclick="openApiTesterModal()" title="REST API & Postman Simülatör Test Alanı">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          <span>REST API Test Konsolu</span>
-        </button>
-        <button class="btn-urgent-add" onclick="openUrgentPatientModal()" title="Acil Servis veya Yoğun Bakımdan Hasta Kabulü">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-          </svg>
-          + Acil Kabul
+          <span id="txt-sidebar-auth">Giriş Yap</span>
         </button>
       </div>
 
-      <!-- Hasta Kartları Listesi -->
-      <div class="secretary-table-container">
-        <div class="patient-cards-list" id="secretary-patient-list">
-          <!-- JS ile doldurulur -->
-        </div>
-      </div>
-    </section>
+    </aside>
 
     <!-- -----------------------------------------------------------------------
-         SAĞ YARI (%50): TV BEKLEME DISPLAY EKRANI (DİREKT SALON YAYINI)
+         SAĞ ANA İÇERİK ALANI: GÖRÜNÜM 1 (HASTA YÖNETİMİ) & GÖRÜNÜM 2 (HESAP YÖNETİMİ)
          ----------------------------------------------------------------------- -->
-    <section class="panel-tv-display" aria-label="Hasta Bilgilendirme Ekranı">
-      <div class="tv-top-bar">
-        <div class="tv-badge-live">
-          <span class="tv-dot-pulse"></span>
-          <span>TV DISPLAY YAYIN EKRANI</span>
-        </div>
+    <main class="app-main-content">
+      
+      <!-- =====================================================================
+           GÖRÜNÜM 1: HASTA YÖNETİMİ PANELİ (BÖLÜNMÜŞ EKRAN DESTEKLİ)
+           ===================================================================== -->
+      <section class="view-section active" id="view-patient-management">
+        <div class="split-workspace" style="height: 100%;">
+          
+          <!-- Sol Yarı: Sekreter Paneli -->
+          <div class="panel-secretary" id="panel-secretary">
+            <div class="panel-header">
+              <div class="panel-title">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Hasta Durum Yönetimi
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="secretary-total-count" style="font-size: 11px; font-weight: 700; color: #38bdf8;">
+                  0 Hasta Kayıtlı
+                </span>
+              </div>
+            </div>
 
-        <div class="slide-indicator-container">
-          <div class="slide-dots" id="tv-slide-dots">
-            <!-- JS ile dinamik sayfalara göre butonlar üretilir -->
+            <!-- Kilitli Durum Uyarısı -->
+            <div id="secretary-lock-overlay" class="secretary-lock-overlay" style="display: none;">
+              <div class="lock-card">
+                <div class="lock-icon">
+                  <svg width="36" height="36" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                  </svg>
+                </div>
+                <h3>Giriş Yapılması Gereklidir</h3>
+                <p>Hasta durumlarını yönetmek için lütfen giriş yapınız.</p>
+                <button type="button" class="btn-urgent-add" onclick="openLoginModal()" style="margin-top: 14px;">Giriş Yap</button>
+              </div>
+            </div>
+
+            <!-- Takvim Şeridi -->
+            <div class="calendar-schedule-bar">
+              <div class="calendar-controls-left">
+                <div class="calendar-field-group">
+                  <label for="inp-session-date">Seans Tarihi:</label>
+                  <input type="date" id="inp-session-date" class="calendar-date-input" onchange="onCalendarDateChange()">
+                </div>
+              </div>
+              <div class="calendar-auto-badge" id="calendar-auto-sync-status">
+                📅 Takvim Aktif
+              </div>
+            </div>
+
+            <!-- Araç Çubuğu -->
+            <div class="secretary-toolbar">
+              <input type="text" id="secretary-search" class="secretary-search" placeholder="Hasta adı veya No ile ara...">
+
+              <button type="button" class="btn-emergency-add" onclick="openAddPatientModal('ACIL')" title="Acil Servisten Gelen Hasta">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <span>🚨 + Acil</span>
+              </button>
+
+              <button type="button" class="btn-patient-add" onclick="openAddPatientModal('RUTIN')" title="Yeni Hasta Ekle">
+                <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                <span>+ Hasta Ekle</span>
+              </button>
+            </div>
+
+            <!-- Hasta Kartları -->
+            <div class="secretary-table-container">
+              <div class="patient-cards-list" id="secretary-patient-list"></div>
+            </div>
           </div>
-          <div class="timer-pill" id="timer-pill">Sonraki Ekran: 15s</div>
+
+          <!-- Sağ Yarı: Canlı TV Bekleme Ekranı Önizlemesi -->
+          <section class="panel-display" id="panel-display" aria-label="Bekleme Salonu Ekranı">
+            <div class="display-header">
+              <div class="display-header-left">
+                <h2>CANLI BEKLEME SALONU BİLGİLENDİRME EKRANI</h2>
+                <div class="display-header-sub">Hasta Yakınları Bilgilendirme Sistemi</div>
+              </div>
+              <div class="display-header-right">
+                <div class="active-badge">
+                  <span class="live-dot"></span> CANLI YAYINDA
+                </div>
+              </div>
+            </div>
+
+            <div class="slide-viewport">
+              <div class="slides-container" id="slides-container"></div>
+            </div>
+
+            <div class="carousel-nav">
+              <div class="slide-dots" id="slide-dots"></div>
+              <div class="slide-counter" id="slide-counter">1 / 1</div>
+            </div>
+          </section>
+
         </div>
-      </div>
+      </section>
 
-      <!-- CAROUSEL VİTRİNİ (SAYFA BAŞINA MAX 4 HASTA - SCROLLBARSIZ VE OTOMATİK SAYFALAMALI) -->
-      <div class="tv-carousel-viewport">
-        <div class="tv-carousel-track" id="tv-carousel-track">
-          <!-- JS ile renderTvSlides() fonksiyonunda dinamik slaytlar üretilir -->
-        </div>
-      </div>
-
-      <!-- TV Alt Bilgi Kayan Mesaj Şeridi -->
-      <footer class="tv-ticker-bar">
-        <div class="ticker-icon">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <div class="ticker-text" id="tv-ticker-text">
-          Hemodiyaliz Ünitesi Bilgilendirme: İlk diyaliz ön hazırlığı 30 dk, standart seanslar 2 saat 25 dakikadır. Lütfen çağrıları ekrandan takip ediniz.
-        </div>
-      </footer>
-    </section>
-
-  </main>
-
-  <!-- =========================================================================
-       MODAL 1: ACİL SERVİS / YOĞUN BAKIM HASTA KABULÜ (SIFIR MANUEL GİRİŞ)
-       ========================================================================= -->
-  <div class="modal-overlay" id="urgent-patient-modal">
-    <div class="modal-content" style="max-width: 480px;">
-      <h3 style="color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-        </svg>
-        Acil Servis / Nucleus Protokol Kabulü
-      </h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-        Manuel isim/TC girişi yapılmaz. Hasta verileri Nucleus HBYS üzerinden otomatik çekilir.
-      </p>
-
-      <form id="form-urgent-patient" onsubmit="handleUrgentPatientSubmit(event)">
-        <div class="form-group">
-          <label for="sel-nucleus-urgent-protocol">Nucleus Acil Konsültasyon / Protokol Listesi:</label>
-          <select id="sel-nucleus-urgent-protocol" class="form-control" required onchange="onUrgentProtocolSelected()">
-            <!-- JS ile doldurulur -->
-          </select>
-        </div>
-
-        <div id="nucleus-patient-preview" style="display: none; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 12px;">
-          <div style="font-weight: 700; color: #fff;" id="preview-ad-soyad">-</div>
-          <div style="color: var(--text-muted); margin-top: 3px;">
-            TC: <span id="preview-tc" style="color: #cbd5e1;">-</span> • 
-            Kaynak: <span id="preview-kaynak" style="color: #38bdf8;">-</span>
+      <!-- =====================================================================
+           GÖRÜNÜM 2: GÜN DEĞİŞTİRME & LİSTE YÖNETİMİ PANELİ (NORMAL LİSTE SAYFASI)
+           ===================================================================== -->
+      <section class="view-section" id="view-schedule-management">
+        <div class="schedule-view-container">
+          
+          <div class="schedule-view-header">
+            <div>
+              <h2>
+                <svg width="22" height="22" fill="none" stroke="#0284c7" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Hasta Gün Değiştirme & Liste Yönetimi
+              </h2>
+              <p>Hastaları bugünkü seansa ekleyebilir, bugünkü listeden çıkarabilir veya seans günlerini (Pzt-Çar-Cum / Sal-Per-Cmt) değiştirebilirsiniz.</p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn-action-small" onclick="resetMasterRosterToDefaults()" title="Varsayılan 17 hastayı geri yükle">
+                🔄 Varsayılan 17 Hasta
+              </button>
+            </div>
           </div>
-          <div style="color: #fbbf24; margin-top: 3px; font-weight: 600;" id="preview-gecmis">-</div>
-        </div>
 
-        <div class="form-group">
-          <label for="inp-urgent-bed">Atanacak Diyaliz Yatağı (1-9):</label>
-          <select id="inp-urgent-bed" class="form-control" required>
-            <!-- JS ile doldurulur -->
-          </select>
-        </div>
+          <!-- Güvenlik Kilidi Şeridi -->
+          <div class="schedule-safety-bar">
+            <span style="color: #9a3412; font-weight: 600; font-size: 12px;">⚠️ Yanlışlıkla silmeyi önlemek için kalıcı silme kilitlidir.</span>
+            <label style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #c2410c; cursor: pointer; font-size: 12px;">
+              <input type="checkbox" id="chk-unlock-delete" onchange="toggleDeleteSafetyLock()">
+              Silme Kilidini Aç
+            </label>
+          </div>
 
-        <div class="modal-buttons">
-          <button type="button" class="btn-action-small" onclick="closeUrgentPatientModal()">İptal</button>
-          <button type="submit" class="btn-urgent-add">Nucleus Verileriyle Yatağa Kabul Et</button>
+          <!-- Normal Kaydırılabilir Hasta Listesi Kartı -->
+          <div class="schedule-table-card">
+            <div class="delete-patient-list normal-page-list" id="delete-patient-modal-list">
+              <!-- JS ile sade liste satırları render edilir -->
+            </div>
+          </div>
+
         </div>
-      </form>
-    </div>
+      </section>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           GÖRÜNÜM 2: HESAP YÖNETİMİ PANELİ (HER HESAP İÇİN SOL MENÜDEN ERİŞİLİR)
+           ===================================================================== -->
+      <section class="view-section" id="view-account-management">
+        <div class="account-view-container">
+          
+          <div class="account-view-header">
+            <h2>
+              <svg width="24" height="24" fill="none" stroke="#0284c7" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              Hesap & Kullanıcı Yönetimi
+            </h2>
+            <p>Kullanıcı bilgilerinizi inceleyebilir, şifrenizi güncelleyebilir ve yönetici (admin) iseniz sekreter hesaplarını yönetebilirsiniz.</p>
+          </div>
+
+          <!-- Bilgi & Şifre Değiştirme Kartları Grid -->
+          <div class="account-cards-grid">
+            
+            <!-- Kart 1: Profil Bilgileri -->
+            <div class="account-card">
+              <div class="account-card-title">
+                <svg width="18" height="18" fill="none" stroke="#0284c7" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
+                </svg>
+                Hesap Bilgileri
+              </div>
+              <div class="account-info-row">
+                <span>Kullanıcı Adı:</span>
+                <span id="acc-info-username">-</span>
+              </div>
+              <div class="account-info-row">
+                <span>Ad Soyad:</span>
+                <span id="acc-info-fullname">-</span>
+              </div>
+              <div class="account-info-row">
+                <span>Yetki / Rol:</span>
+                <span id="acc-info-role">-</span>
+              </div>
+              <div class="account-info-row">
+                <span>Kayıt Tarihi:</span>
+                <span id="acc-info-date">-</span>
+              </div>
+            </div>
+
+            <!-- Kart 2: Şifre Değiştirme -->
+            <div class="account-card">
+              <div class="account-card-title">
+                <svg width="18" height="18" fill="none" stroke="#0d9488" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                Şifre Değiştir
+              </div>
+              <form id="form-change-password" onsubmit="handleChangePassword(event)">
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <label for="inp-new-pass" style="font-size: 12px;">Yeni Şifre:</label>
+                  <input type="password" id="inp-new-pass" class="form-control" placeholder="••••••••" required minlength="3">
+                </div>
+                <div class="form-group" style="margin-bottom: 14px;">
+                  <label for="inp-new-pass-confirm" style="font-size: 12px;">Yeni Şifre (Tekrar):</label>
+                  <input type="password" id="inp-new-pass-confirm" class="form-control" placeholder="••••••••" required minlength="3">
+                </div>
+                <button type="submit" class="btn-patient-add" style="width: 100%; justify-content: center;">
+                  Şifreyi Güncelle
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          <!-- Kart 3: SEKRETER YÖNETİMİ (SADECE ADMİN HESABIYLA GİRİLDİĞİNDE GÖRÜNÜR) -->
+          <div class="secretary-management-card" id="admin-secretary-management-card" style="display: none;">
+            <div class="account-card-title" style="color: #6d28d9;">
+              <svg width="20" height="20" fill="none" stroke="#6d28d9" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              Sekreter Yönetimi (Admin Yetkisi)
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px;">
+              Admin olarak yeni sekreter hesapları ekleyebilir veya mevcut sekreterleri sistemden silebilirsiniz.
+            </p>
+
+            <!-- Yeni Sekreter Ekleme Formu -->
+            <form id="form-add-secretary" onsubmit="handleAddSecretarySubmit(event)" style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+              <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 10px;">➕ Yeni Sekreter Hesabı Oluştur</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) 140px; gap: 10px; align-items: flex-end;">
+                <div>
+                  <label for="inp-sec-username" style="font-size: 11.5px; font-weight: 700; display: block; margin-bottom: 4px;">Kullanıcı Adı:</label>
+                  <input type="text" id="inp-sec-username" class="form-control" placeholder="Örn: sekreter2" required>
+                </div>
+                <div>
+                  <label for="inp-sec-fullname" style="font-size: 11.5px; font-weight: 700; display: block; margin-bottom: 4px;">Ad Soyad:</label>
+                  <input type="text" id="inp-sec-fullname" class="form-control" placeholder="Örn: Ayşe Kaya" required>
+                </div>
+                <div>
+                  <label for="inp-sec-password" style="font-size: 11.5px; font-weight: 700; display: block; margin-bottom: 4px;">Şifre:</label>
+                  <input type="password" id="inp-sec-password" class="form-control" placeholder="••••••••" required minlength="3">
+                </div>
+                <div>
+                  <button type="submit" class="btn-emergency-add" style="width: 100%; height: 38px; justify-content: center; background: linear-gradient(135deg, #7c3aed, #4f46e5); border: none;">
+                    + Ekle
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Kayıtlı Sekreterler Listesi -->
+            <div style="font-size: 13px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">📋 Kayıtlı Sistem Kullanıcıları</div>
+            <div style="overflow-x: auto; background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px;">
+              <table class="secretary-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Kullanıcı Adı</th>
+                    <th>Adı Soyadı</th>
+                    <th>Rol</th>
+                    <th>Kayıt Tarihi</th>
+                    <th style="text-align: right;">İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="secretary-table-body">
+                  <!-- JS ile doldurulur -->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+    </main>
   </div>
 
-  <!-- =========================================================================
-       MODAL 2: SEANS TAMAMLAMA / YARIDA KALMA NEDENİ VE BİLGİLENDİRMESİ
-       ========================================================================= -->
-  <div class="modal-overlay" id="abort-modal">
-    <div class="modal-content" style="border-color: rgba(245, 158, 11, 0.5); max-width: 540px;">
-      <h3 style="color: #fcd34d; display: flex; align-items: center; gap: 8px;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-        </svg>
-        Seans Erken Tamamlama / Yarıda Kesme
-      </h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-        Hasta: <strong id="modal-abort-patient-name" style="color: #fff;">-</strong>
-      </p>
-
-      <!-- 3 Ana Neden Kategorisi + Diğer Seçeneği -->
-      <div class="form-group">
-        <label for="sel-abort-category">Diyalizin Yarıda Kalma Nedeni:</label>
-        <select id="sel-abort-category" class="form-control" onchange="onAbortCategoryChange()">
-          <option value="HASTAYA_BAGLI">1. Hastaya Bağlı Nedenler</option>
-          <option value="DAMAR_YOLU">2. Damar Yolu veya Kateter Kaynaklı Nedenler</option>
-          <option value="CIHAZ_DEVRE">3. Cihaz ve Diyaliz Devresine Bağlı Nedenler</option>
-          <option value="DIGER">4. Diğer (Özel Açıklama Yazılacak)</option>
-        </select>
-      </div>
-
-      <!-- İlk 3 durum için TV Ekranında Gözükecek Net Başlık Bilgisi -->
-      <div id="abort-fixed-preview" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 12.5px;">
-        <span style="color: var(--text-muted); display: block; font-size: 11px; margin-bottom: 3px;">TV Display Ekranında Gösterilecektir:</span>
-        <strong id="abort-fixed-text" style="color: #fcd34d;">Hastaya Bağlı Nedenler</strong>
-      </div>
-
-      <!-- Sadece 4. Diğer Seçeneğinde Açılan Text Giriş Alanı -->
-      <div class="form-group" id="abort-custom-text-group" style="display: none;">
-        <label for="inp-abort-reason">Diğer Durum Açıklaması (İsteğe Bağlı):</label>
-        <textarea id="inp-abort-reason" class="form-control" style="height: 80px; resize: none;" 
-                  placeholder="Sekreterin girmek istediği özel gerekçe veya medikal not..."></textarea>
-      </div>
-
-      <div class="modal-buttons">
-        <button type="button" class="btn-action-small" onclick="closeAbortModal()">İptal</button>
-        <button type="button" class="btn-urgent-add" style="background: #b45309;" onclick="saveAbortReason()">Kaydet ve TV Ekranına Yansıt</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       MODAL 3: ORACLE DB / NUCLEUS REST API BAĞLANTI AYARLARI
-       ========================================================================= -->
-  <div class="modal-overlay" id="api-config-modal">
-    <div class="modal-content" style="max-width: 500px;">
-      <h3 style="color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-        </svg>
-        Oracle HBYS Entegrasyon Ayarları
-      </h3>
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
-        Sistem her gün <code>TRUNC(SYSDATE)</code> ile o günün <code>dyz_hasta_seanslari</code> kayıtlarını bu endpoint üzerinden çeker.
-      </p>
-
-      <div class="form-group">
-        <label for="inp-api-endpoint">Oracle Backend REST API URL (İsteğe Bağlı):</label>
-        <input type="text" id="inp-api-endpoint" class="form-control" placeholder="Örn: http://localhost:3000/api/gunluk-seanslar veya /api/seanslar">
-        <span style="font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block;">
-          Boş bırakıldığında veya sunucu yanıt vermediğinde optimize edilmiş yerel Oracle veritabanı simülatörü devreye girer.
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label>SQL Filtresi (Otomatik Günlük):</label>
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 10px; font-family: monospace; font-size: 11px; color: #38bdf8;">
-          WHERE t.seanstarihi &gt;= TRUNC(SYSDATE)<br>
-          &nbsp;&nbsp;AND t.seanstarihi &lt; TRUNC(SYSDATE) + 1
-        </div>
-      </div>
-
-      <div class="modal-buttons">
-        <button type="button" class="btn-action-small" onclick="closeApiConfigModal()">Kapat</button>
-        <button type="button" class="btn-urgent-add" onclick="saveApiEndpointConfig()">Ayarları Kaydet ve Test Et</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       MODAL 3B: REST APİ TEST ALANI & POSTMAN İSTEK SİMÜLATÖRÜ
-       emirhan.txt: "api isteği gönderebilmesi için test alanı oluşturulacak"
-       emirhan.txt: "POSTMAN'den test apisi vereceğiz . mock apiye istekleri göndermeye çalışacam"
-       ========================================================================= -->
-  <div class="modal-overlay" id="api-tester-modal">
-    <div class="modal-content" style="max-width: 680px; max-height: 90vh; overflow-y: auto;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px;">
-        <h3 style="color: #0284c7; display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px;">
-          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
-          </svg>
-          REST API Test Alanı & Postman İstek Simülatörü
-        </h3>
-        <button type="button" onclick="closeApiTesterModal()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
-      </div>
-
-      <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
-        Sekreter ekranından TV Display'e tek endpoint (<code>/api/seanslar</code>) üzerinden veri gönderme veya Postman isteklerini simüle etme alanı.
-      </p>
-
-      <!-- İstek Satırı (HTTP Method + URL + Gönder Butonu) -->
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <select id="tester-http-method" class="form-control" style="width: 110px; font-weight: 700; color: #0284c7;" onchange="onTesterMethodChange()">
-          <option value="GET">GET</option>
-          <option value="POST" selected>POST</option>
-          <option value="PATCH">PATCH</option>
-        </select>
-        <input type="text" id="tester-url" class="form-control" value="http://localhost:3000/api/seanslar" placeholder="http://localhost:3000/api/seanslar" style="flex: 1; font-family: monospace; font-size: 12px;">
-        <button type="button" class="btn-urgent-add" onclick="executeApiTestRequest()" id="btn-run-api-test" style="padding: 8px 18px;">
-          Gönder
-        </button>
-      </div>
-
-      <!-- Hızlı Şablon Butonları -->
-      <div style="margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
-        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">Hızlı Postman Test Şablonları:</span>
-        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('STATUS_UPDATE')" style="font-size: 11px;">1. Durum Değiştir (Yatağa Bağla)</button>
-        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('ROOM_CALL')" style="font-size: 11px;">2. Odaya Çağır (Hazırlık)</button>
-        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('PRESENCE_ABSENT')" style="font-size: 11px;">3. Gelmedi İşaretle</button>
-        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('NEW_PATIENT')" style="font-size: 11px;">4. Yeni Acil Hasta Ekle</button>
-        <button type="button" class="btn-action-small" onclick="loadTesterTemplate('GET_ALL')" style="font-size: 11px;">5. Tüm Seansları Çek (GET)</button>
-      </div>
-
-      <!-- JSON Gövdesi (Body) -->
-      <div class="form-group" id="tester-body-group">
-        <label for="tester-request-body" style="display: flex; justify-content: space-between;">
-          <span>JSON İstek Gövdesi (Request Payload):</span>
-          <span style="font-size: 11px; color: #0d9488; font-weight: normal;">Content-Type: application/json</span>
-        </label>
-        <textarea id="tester-request-body" class="form-control" style="font-family: monospace; font-size: 11.5px; height: 110px; background: #0f172a; color: #38bdf8; border-color: #334155; resize: vertical;">{
-  "HASTASEANSREFNO": 10001,
-  "STATU": "BAGLANDI",
-  "PRESENCE": "GELDI"
-}</textarea>
-      </div>
-
-      <!-- Yanıt Alanı (Response) -->
-      <div class="form-group">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <label style="margin: 0; font-weight: 700; font-size: 12px;">Sunucu Yanıtı (API Response):</label>
-          <span id="tester-response-status" style="font-size: 11px; font-weight: 700; color: #64748b;">Henüz istek gönderilmedi</span>
-        </div>
-        <pre id="tester-response-output" style="background: #020617; border: 1px solid #1e293b; border-radius: 6px; padding: 10px 12px; font-family: monospace; font-size: 11.5px; color: #94a3b8; max-height: 160px; overflow-y: auto; white-space: pre-wrap; margin: 0;">// Gönder butonuna basıldığında HTTP yanıtı burada gösterilecektir.</pre>
-      </div>
-
-      <!-- Postman / cURL İpucu Kutusu -->
-      <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 10px 12px; margin-top: 12px; font-size: 11.5px; color: var(--text-muted);">
-        💡 <strong>Postman & cURL Testi İçin:</strong><br>
-        <code>curl -X POST http://localhost:3000/api/seanslar -H "Content-Type: application/json" -d '{"HASTASEANSREFNO": 10001, "STATU": "BAGLANDI"}'</code>
-      </div>
-
-      <div class="modal-buttons" style="margin-top: 16px;">
-        <button type="button" class="btn-action-small" onclick="closeApiTesterModal()">Kapat</button>
-        <button type="button" class="btn-urgent-add" onclick="executeApiTestRequest()">İsteği Çalıştır ve Ekrana Yansıt</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================================
-       MODAL 4: SEKRETER GİRİŞ MODALI (KULLANICI ADI & ŞİFRE)
-       ========================================================================= -->
+  <!-- Giriş Modalı -->
   <div class="modal-overlay" id="login-modal">
     <div class="modal-content" style="max-width: 420px; border-top: 4px solid #0284c7;">
       <div style="text-align: center; margin-bottom: 16px;">
@@ -408,16 +424,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
           </svg>
         </div>
-        <h3 style="color: #0f172a; font-size: 17px; font-weight: 800;">Hemodiyaliz Sekreter Girişi</h3>
+        <h3 style="color: #0f172a; font-size: 17px; font-weight: 800;">Hemodiyaliz Sistemi Girişi</h3>
         <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
-          Süreç ve hasta durumlarını yönetmek için kullanıcı bilgilerinizi giriniz.
+          Sekreter veya Yönetici (Admin) bilgilerinizle giriş yapınız.
         </p>
       </div>
 
       <form id="form-login" onsubmit="handleSecretaryLogin(event)">
         <div class="form-group">
-          <label for="inp-login-username">Kullanıcı Adı / Sicil No:</label>
-          <input type="text" id="inp-login-username" class="form-control" placeholder="Örn: sekreter / admin" required autocomplete="username">
+          <label for="inp-login-username">Kullanıcı Adı:</label>
+          <input type="text" id="inp-login-username" class="form-control" placeholder="Örn: sekreter veya admin" required autocomplete="username">
         </div>
 
         <div class="form-group">
@@ -430,8 +446,10 @@
         </div>
 
         <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px 10px; margin-bottom: 16px; font-size: 11.5px; color: var(--text-muted);">
-          💡 <strong>Demo Giriş Bilgileri:</strong><br>
-          Kullanıcı Adı: <code style="color: #0284c7; font-weight: 700;">sekreter</code> • Şifre: <code style="color: #0284c7; font-weight: 700;">1234</code>
+          💡 <strong>Kayıtlı Girişler:</strong><br>
+          • <strong>Admin Girişi:</strong> <code style="color: #6d28d9; font-weight: 700;">admin</code> / <code style="color: #6d28d9; font-weight: 700;">1234</code><br>
+          • <strong>Sekreter Girişi:</strong> <code style="color: #0284c7; font-weight: 700;">sekreter</code> / <code style="color: #0284c7; font-weight: 700;">1234</code><br>
+          • <strong>Hemşire Girişi (Hafta Sonu / Nöbet):</strong> <code style="color: #0d9488; font-weight: 700;">hemsire</code> / <code style="color: #0d9488; font-weight: 700;">1234</code>
         </div>
 
         <div class="modal-buttons" style="justify-content: stretch; gap: 8px;">
@@ -442,8 +460,146 @@
     </div>
   </div>
 
-  <div class="toast-box" id="toast"></div>
+  <!-- Hasta Ekle Modalı -->
+  <div class="modal-overlay" id="add-patient-modal">
+    <div class="modal-content" id="add-patient-modal-box" style="max-width: 440px; border-top: 4px solid #059669;">
+      <h3 id="add-patient-modal-title" style="color: #059669; display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        ➕ Yeni Hasta Ekle
+      </h3>
+      <p id="add-patient-modal-desc" style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+        Lütfen hastanın adını, soyadını ve hasta numarasını eksiksiz giriniz.
+      </p>
 
-  <script src="app.js"></script>
+      <form id="form-add-patient" onsubmit="handleAddPatientSubmit(event)">
+        <input type="hidden" id="inp-new-patient-type" value="PLANLANDI">
+
+        <div class="form-group">
+          <label for="inp-new-patient-name">Hasta Adı ve Soyadı: <span style="color: #dc2626;">*</span></label>
+          <input type="text" id="inp-new-patient-name" class="form-control" placeholder="Örn: RIZA HALUK TOYGARLI" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inp-new-patient-no">Hasta No (Zorunlu • 5-8 Haneli Sadece Rakam): <span style="color: #dc2626;">*</span></label>
+          <input type="text" id="inp-new-patient-no" class="form-control" placeholder="Örn: 6736616" inputmode="numeric" maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)" required>
+        </div>
+
+        <div id="routine-patient-extra-fields">
+          <div class="form-group">
+            <label style="margin-bottom: 8px; display: block; font-size: 12.5px; font-weight: 700; color: #0f172a;">
+              📅 Seans Günleri: <span style="color: #dc2626;">*</span>
+            </label>
+            <div class="custom-days-grid">
+              <label class="day-check-item"><input type="checkbox" value="PZT" class="chk-new-patient-day"> <span>Pazartesi</span></label>
+              <label class="day-check-item"><input type="checkbox" value="SAL" class="chk-new-patient-day"> <span>Salı</span></label>
+              <label class="day-check-item"><input type="checkbox" value="CAR" class="chk-new-patient-day"> <span>Çarşamba</span></label>
+              <label class="day-check-item"><input type="checkbox" value="PER" class="chk-new-patient-day"> <span>Perşembe</span></label>
+              <label class="day-check-item"><input type="checkbox" value="CUM" class="chk-new-patient-day"> <span>Cuma</span></label>
+              <label class="day-check-item"><input type="checkbox" value="CMT" class="chk-new-patient-day"> <span>Cumartesi</span></label>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+              <label for="inp-new-patient-shift">Vardiya:</label>
+              <select id="inp-new-patient-shift" class="form-control">
+                <option value="SABAH">🌅 Sabah</option>
+                <option value="OGLEN">☀️ Öğlen</option>
+                <option value="BELIRTILMEMIS">Belirtilmemiş</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="inp-new-patient-bed">Yatak No:</label>
+              <select id="inp-new-patient-bed" class="form-control">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-buttons" style="margin-top: 14px;">
+          <button type="button" class="btn-action-small" onclick="closeAddPatientModal()">İptal</button>
+          <button type="submit" class="btn-patient-add" id="btn-submit-add-patient">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hasta Detay Modalı -->
+  <div class="modal-overlay" id="patient-schedule-modal">
+    <div class="modal-content" style="max-width: 480px; border-top: 4px solid #0284c7;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <h3 style="color: #0f172a; font-size: 16px; font-weight: 800;" id="schedule-modal-patient-name">Hasta Adı</h3>
+          <p style="font-size: 12px; color: var(--text-muted);" id="schedule-modal-patient-sub">Hasta No: -</p>
+        </div>
+        <span class="status-badge-mini badge-blue" id="schedule-modal-status-badge">Kayıtlı</span>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="detail-modal-patient-name-input" style="font-size: 12px; font-weight: 700; color: #0f172a;">Hasta Adı Soyadı:</label>
+        <input type="text" id="detail-modal-patient-name-input" class="form-control" required>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label for="detail-modal-patient-no" style="font-size: 12px; font-weight: 700; color: #0f172a;">Hasta No (5-8 Haneli Rakam):</label>
+        <input type="text" id="detail-modal-patient-no" class="form-control" inputmode="numeric" maxlength="8" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 8)">
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="detail-modal-bed-select" style="font-size: 12px; font-weight: 700; color: #0f172a;">Yatak No:</label>
+          <select id="detail-modal-bed-select" class="form-control"></select>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;" id="detail-modal-shift-box">
+          <label for="detail-modal-shift-select" style="font-size: 12px; font-weight: 700; color: #0f172a;">Vardiya:</label>
+          <select id="detail-modal-shift-select" class="form-control">
+            <option value="SABAH">🌅 Sabah</option>
+            <option value="OGLEN">☀️ Öğlen</option>
+            <option value="BELIRTILMEMIS">Belirtilmemiş</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: #334155;">Diyaliz Seans Süresi</span>
+          <span style="font-size: 11px; font-weight: 700; color: #0284c7;" id="detail-modal-time-text">Planlanan: 3 sa (180 dk)</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" class="btn-action-small" onclick="adjustDetailModalTime(-15)" style="flex: 1; font-size: 11.5px;">-15 dk</button>
+          <button type="button" class="btn-action-small" onclick="adjustDetailModalTime(+15)" style="flex: 1; font-size: 11.5px; color: #0369a1; border-color: #bae6fd; background: #f0f9ff;">+15 dk</button>
+          <button type="button" class="btn-action-small" onclick="adjustDetailModalTime(+30)" style="flex: 1; font-size: 11.5px; color: #0369a1; border-color: #bae6fd; background: #f0f9ff;">+30 dk</button>
+        </div>
+      </div>
+
+      <div id="detail-modal-days-section">
+        <label style="margin-bottom: 6px; display: block; font-size: 12px; font-weight: 700; color: #0f172a;">
+          📅 Rutin Seans Günleri:
+        </label>
+        <div class="custom-days-grid">
+          <label class="day-check-item"><input type="checkbox" value="PZT" class="chk-custom-day"> <span>Pazartesi</span></label>
+          <label class="day-check-item"><input type="checkbox" value="SAL" class="chk-custom-day"> <span>Salı</span></label>
+          <label class="day-check-item"><input type="checkbox" value="CAR" class="chk-custom-day"> <span>Çarşamba</span></label>
+          <label class="day-check-item"><input type="checkbox" value="PER" class="chk-custom-day"> <span>Perşembe</span></label>
+          <label class="day-check-item"><input type="checkbox" value="CUM" class="chk-custom-day"> <span>Cuma</span></label>
+          <label class="day-check-item"><input type="checkbox" value="CMT" class="chk-custom-day"> <span>Cumartesi</span></label>
+        </div>
+      </div>
+
+      <div id="detail-modal-emergency-day-box" style="display: none; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 10px; font-size: 12px; color: #991b1b; font-weight: 600;">
+        🚨 Bu hasta acil servisten kabul edilmiştir ve yalnızca bugünkü seans listesinde kayıtlıdır.
+      </div>
+
+      <div class="modal-buttons" style="margin-top: 16px;">
+        <button type="button" class="btn-action-small" onclick="closePatientScheduleModal()">Vazgeç</button>
+        <button type="button" class="btn-patient-add" onclick="savePatientCustomSchedule()">Kaydet ve Güncelle</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="app.js?v=10"></script>
 </body>
 </html>
